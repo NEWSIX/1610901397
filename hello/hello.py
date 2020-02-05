@@ -1,2 +1,2 @@
-a="i am KKIIKKCKJSj"
+a="i am TEST"
 print(a)
