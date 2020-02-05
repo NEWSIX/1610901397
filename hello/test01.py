@@ -1,2 +1,6 @@
-a=5+6+7
-print(a)
+a=float(input("a : "))
+b=int(input("b : "))
+z=a+b
+print(z)
+x=a/b
+print(x)
