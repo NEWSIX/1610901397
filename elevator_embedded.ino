@@ -6,9 +6,10 @@
 #define PF2 A2
 #define PF3 A3 
 #define PF4 A4 
-#define PF5 A5
-#define PF6 A6
-#define PF7 A7
+#define PA0 22
+#define PA1 23
+#define PA2 24
+#define PA3 25
 
 #define PC0 37 //7seg
 #define PC1 36
@@ -29,7 +30,7 @@ HX711 scale;
 Servo myservo1;
 Servo myservo2;
 
-int e0,e1,e2,e3,e4,e5,e6,e7;
+int e0,e1,e2,e3,e4,f0,f1,f2,f3;
 int pos = 0;  
 int X ;
 void setup() 
@@ -41,9 +42,12 @@ pinMode(INPUT,PF1);
 pinMode(INPUT,PF2);
 pinMode(INPUT,PF3);
 pinMode(INPUT,PF4);
-pinMode(INPUT,PF5);
-pinMode(INPUT,PF6);
-pinMode(INPUT,PF7);
+
+pinMode(INPUT,PA0);
+pinMode(INPUT,PA1);
+pinMode(INPUT,PA2);
+pinMode(INPUT,PA3);
+
 
  scale.begin(DOUT, CLK);
  
@@ -67,10 +71,11 @@ e1= digitalRead(PF1 ); // close
 e2= digitalRead(PF2 ); //floor1
 e3= digitalRead(PF3 ); //floor 2
 e4= digitalRead(PF4 ); //floor 3
-e5= digitalRead(PF5 ); //requst up
-e6= digitalRead(PF6 ); //requst down
-e7= digitalRead(PF7 ); // emergency ( Not a point)
 
+f0= digitalRead(PA0 ); //requst up floor 1
+f1= digitalRead(PA1); //requst down floor 3
+f2= digitalRead(PA2);//requst up floor 2
+f3= digitalRead(PA3); //requst down floor 2
 long reading = scale.read();
 X = reading/10000;
 
@@ -87,7 +92,8 @@ Serial.println(X);
  delay(300);
  */
 //button_door(); 
-button_7seg();
+//button_7seg();
+lilac();
 }
 
 /*-----------------------------------servo------------------------------------*/
@@ -103,15 +109,15 @@ Serial.println("Close Door");
    }
 void servofloor1(){
       pos = -180;
-      myservo1.write(pos);
+      myservo2.write(pos);
    }
   void servofloor2(){
       pos = 93;
-      myservo1.write(pos);
+      myservo2.write(pos);
    }
 void servofloor3(){
       pos = 180;
-      myservo1.write(pos);
+      myservo2.write(pos);
    }
  /*-----------------------------------XXX------------------------------------*/
 void weight(){
@@ -133,20 +139,20 @@ void weight(){
 
  void button_door(){
  if (e0 == 0 && e1 == 1 ) //button open
-    {
+    {	//int kk=1;
         Serial.println("OPEN -PRESS");
 	servoOpen();
 	delay(5000);
 	weight();
     }
  else if (e0 == 1 && e1 == 1) //button open
-    {
+    {// int kk=2;
        Serial.println("OPEN -NOT PRESS");
        servoClose();
        weight();
     }
    else if (e0 == 1 && e1== 0 ) //button close  
-   {
+   {// int kk=3;
       weight();
       delay(1000);
       Serial.println("CLOSE - PRESS");
@@ -216,4 +222,39 @@ void weight(){
       sevensegment(3);
    }
   }
-  
+    /*-----------------------------------Press------------------------------------*/
+void chosefloor(){
+/*while(e2==1 || e3==1 || e4==1 || f0==1 || f1==1 || f2==1 || f3==1){
+   Serial.println("PREEEEEEEEESSSSSSSS");
+}
+*/
+   if(e2==0 && e3 == 1 && e4==1 ){
+   Serial.println("Floor 1");
+   servofloor1();
+   }
+      if(e2==1 && e3 == 0 && e4==1){
+   Serial.println("Floor 2");
+   servofloor2();
+   }
+      if(e2==1 && e3 == 1 && e4==0){
+   Serial.println("Floor 3");
+   servofloor3();
+   }
+   }
+   
+void requestfloor(){
+      if(f0==0){
+   Serial.println("floor 1 req up");
+   }
+      if(f1==0){
+   Serial.println("floor 3 req down ");
+   }
+      if(f2==0){
+   Serial.println("floor 2 req up");
+   }
+      if(f3==0){
+   Serial.println("floor 2 req down");
+   }
+
+   }
+   
