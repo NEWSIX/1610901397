@@ -10,6 +10,15 @@
 #define PF6 A6
 #define PF7 A7
 
+#define PC0 37 //7seg
+#define PC1 36
+#define PC2 35
+#define PC3 34
+#define PC4 33
+#define PC5 32
+#define PC6 31
+#define PC7 30
+
 #define PB4 10 //servo
 #define PB5 11
 
@@ -40,6 +49,15 @@ pinMode(INPUT,PF7);
  
   myservo1.attach(PB4);
   myservo2.attach(PB5); 
+  
+pinMode(OUTPUT,PC0);
+pinMode(OUTPUT,PC1);
+pinMode(OUTPUT,PC2);
+pinMode(OUTPUT,PC3);
+pinMode(OUTPUT,PC4);
+pinMode(OUTPUT,PC5);
+pinMode(OUTPUT,PC6);
+pinMode(OUTPUT,PC7);
 }
 
 void loop() 
@@ -68,12 +86,28 @@ Serial.println(e7);
 Serial.println(X);
  delay(300);
  */
-
 //button_door(); 
+sevensegment(0);
+delay(100);
+sevensegment(1);
+delay(100);
+sevensegment(2);
+delay(100);
+sevensegment(3);
+delay(100);
+sevensegment(4);
+delay(100);
+sevensegment(5);
+delay(100);
+sevensegment(6);
+delay(100);
+sevensegment(7);
+delay(100);
+
 
 }
 
-/*
+/*-----------------------------------servo------------------------------------*/
 void servoOpen(){
 Serial.println("Open Door");
       pos = 180;
@@ -84,8 +118,19 @@ Serial.println("Close Door");
   pos = -180;
       myservo1.write(pos);
    }
-
-   
+void servofloor1(){
+      pos = -180;
+      myservo1.write(pos);
+   }
+  void servofloor2(){
+      pos = 93;
+      myservo1.write(pos);
+   }
+void servofloor3(){
+      pos = 180;
+      myservo1.write(pos);
+   }
+ /*-----------------------------------XXX------------------------------------*/
 void weight(){
    if (X<100)
    {
@@ -123,17 +168,89 @@ void weight(){
       delay(1000);
       Serial.println("CLOSE - PRESS");
     }
-    
-    
-
- }
- */
- 
-void servofloor1(){
-      pos = -180;
-      myservo1.write(pos);
-   }
-void servofloor3(){
-      pos = 180;
-      myservo2.write(pos);
-   }
+  }
+  /*-----------------------------------7seg------------------------------------*/
+  
+ void sevensegment(int num){
+ if (num== 0){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,HIGH);
+ digitalWrite(PC5,HIGH);
+ digitalWrite(PC6,LOW);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 1){
+ digitalWrite(PC0,LOW); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,LOW);
+ digitalWrite(PC4,LOW);
+ digitalWrite(PC5,LOW);
+ digitalWrite(PC6,LOW);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 2){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,LOW);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,HIGH);
+ digitalWrite(PC5,LOW);
+ digitalWrite(PC6,HIGH);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 3){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,LOW);
+ digitalWrite(PC5,LOW);
+ digitalWrite(PC6,HIGH);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 4){
+ digitalWrite(PC0,LOW); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,LOW);
+ digitalWrite(PC5,HIGH);
+ digitalWrite(PC6,HIGH);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 5){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,LOW);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,LOW);
+ digitalWrite(PC5,HIGH);
+ digitalWrite(PC6,HIGH);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 6){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,LOW);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,HIGH);
+ digitalWrite(PC4,HIGH);
+ digitalWrite(PC5,HIGH);
+ digitalWrite(PC6,HIGH);
+ digitalWrite(PC7,HIGH);
+ } 
+  if (num== 7){
+ digitalWrite(PC0,HIGH); 
+ digitalWrite(PC1,HIGH);
+ digitalWrite(PC2,HIGH);
+ digitalWrite(PC3,LOW);
+ digitalWrite(PC4,LOW);
+ digitalWrite(PC5,LOW);
+ digitalWrite(PC6,LOW);
+ digitalWrite(PC7,HIGH);
+ } 
+}
+  /*-----------------------------------7seg------------------------------------*/
