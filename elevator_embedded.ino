@@ -87,24 +87,7 @@ Serial.println(X);
  delay(300);
  */
 //button_door(); 
-sevensegment(0);
-delay(100);
-sevensegment(1);
-delay(100);
-sevensegment(2);
-delay(100);
-sevensegment(3);
-delay(100);
-sevensegment(4);
-delay(100);
-sevensegment(5);
-delay(100);
-sevensegment(6);
-delay(100);
-sevensegment(7);
-delay(100);
-
-
+button_7seg();
 }
 
 /*-----------------------------------servo------------------------------------*/
@@ -172,16 +155,6 @@ void weight(){
   /*-----------------------------------7seg------------------------------------*/
   
  void sevensegment(int num){
- if (num== 0){
- digitalWrite(PC0,HIGH); 
- digitalWrite(PC1,HIGH);
- digitalWrite(PC2,HIGH);
- digitalWrite(PC3,HIGH);
- digitalWrite(PC4,HIGH);
- digitalWrite(PC5,HIGH);
- digitalWrite(PC6,LOW);
- digitalWrite(PC7,HIGH);
- } 
   if (num== 1){
  digitalWrite(PC0,LOW); 
  digitalWrite(PC1,HIGH);
@@ -212,45 +185,35 @@ void weight(){
  digitalWrite(PC6,HIGH);
  digitalWrite(PC7,HIGH);
  } 
-  if (num== 4){
+   if (num== 9){
  digitalWrite(PC0,LOW); 
- digitalWrite(PC1,HIGH);
- digitalWrite(PC2,HIGH);
- digitalWrite(PC3,HIGH);
- digitalWrite(PC4,LOW);
- digitalWrite(PC5,HIGH);
- digitalWrite(PC6,HIGH);
- digitalWrite(PC7,HIGH);
- } 
-  if (num== 5){
- digitalWrite(PC0,HIGH); 
  digitalWrite(PC1,LOW);
- digitalWrite(PC2,HIGH);
- digitalWrite(PC3,HIGH);
- digitalWrite(PC4,LOW);
- digitalWrite(PC5,HIGH);
- digitalWrite(PC6,HIGH);
- digitalWrite(PC7,HIGH);
- } 
-  if (num== 6){
- digitalWrite(PC0,HIGH); 
- digitalWrite(PC1,LOW);
- digitalWrite(PC2,HIGH);
- digitalWrite(PC3,HIGH);
- digitalWrite(PC4,HIGH);
- digitalWrite(PC5,HIGH);
- digitalWrite(PC6,HIGH);
- digitalWrite(PC7,HIGH);
- } 
-  if (num== 7){
- digitalWrite(PC0,HIGH); 
- digitalWrite(PC1,HIGH);
- digitalWrite(PC2,HIGH);
+ digitalWrite(PC2,LOW);
  digitalWrite(PC3,LOW);
  digitalWrite(PC4,LOW);
  digitalWrite(PC5,LOW);
  digitalWrite(PC6,LOW);
- digitalWrite(PC7,HIGH);
+ digitalWrite(PC7,LOW);
  } 
+
 }
   /*-----------------------------------7seg------------------------------------*/
+  void button_7seg(){
+   if (e2==0)
+   {   sevensegment(9);
+   delay(100);
+      sevensegment(1);
+
+   }
+   if (e3==0)
+   {   sevensegment(9);
+   delay(100);
+      sevensegment(2);
+   }
+   if (e4==0)
+   {   sevensegment(9);
+   delay(100);
+      sevensegment(3);
+   }
+  }
+  
