@@ -33,6 +33,8 @@ Servo myservo2;
 int e0,e1,e2,e3,e4,f0,f1,f2,f3;
 int pos = 0;  
 int X ;
+int veil=0,polar=0,ris,fa=2,fb;
+
 void setup() 
 {
 Serial.begin(9600);
@@ -72,54 +74,116 @@ e2= digitalRead(PF2 ); //floor1
 e3= digitalRead(PF3 ); //floor 2
 e4= digitalRead(PF4 ); //floor 3
 
-f0= digitalRead(PA0 ); //requst up floor 1
-f1= digitalRead(PA1); //requst down floor 3
-f2= digitalRead(PA2);//requst up floor 2
-f3= digitalRead(PA3); //requst down floor 2
+f0= digitalRead(PA0 ); //request up floor 1
+f1= digitalRead(PA1); //request down floor 3
+f2= digitalRead(PA2);//request up floor 2
+f3= digitalRead(PA3); //request down floor 2
 long reading = scale.read();
 X = reading/10000;
 
 
-//Serial.print(e0);
-/*Serial.print(e1);
-Serial.print(e2);
-Serial.print(e3);
-Serial.print(e4);
-Serial.print(e5);
-Serial.print(e6);
-Serial.println(e7);
-Serial.println(X);
- delay(300);
- */
 //button_door(); 
 //button_7seg();
-lilac();
+//button_door();
+//servoClose();
+button_floor();
+requsetfloor();
+compare_floor();
+
+
 }
 
+ /*-----------------------------------Press------------------------------------*/
+
+ void button_door(){
+ if (e0 == 0 && e1 == 1 ) //button open
+    {	veil=1;
+    }
+ else if (e0 == 1 && e1 == 1) //button open
+    {	veil=2;
+
+    }
+   else if (e0 == 1 && e1== 0 ) //button close  
+   {	veil=3;
+
+    }
+  }
+  
+void button_floor(){
+   if(e2==0 && e3 == 1 && e4==1 ){
+   polar=1;
+   //Serial.println("Floor 1");
+   }
+   if(e2==1 && e3 == 0 && e4==1){
+    polar=2;
+   //Serial.println("Floor 2");
+   }
+    if(e2==1 && e3 == 1 && e4==0){
+    polar=3;
+   //Serial.println("Floor 3");
+   }
+   if(e2==1 && e3 == 1 && e4==1){
+   polar=0;
+   int ris=0;
+   }
+}
+
+void requestfloor(){
+      if(f0==0){
+      fb=1;
+   Serial.println("floor 1 req up");
+   }
+      if(f1==0){
+      fb=2;
+   Serial.println("floor 3 req down ");
+   }
+      if(f2==0){
+      fb=3;
+   Serial.println("floor 2 req up");
+   }
+      if(f3==0){
+      fb=4;
+   Serial.println("floor 2 req down");
+   }
+  }
 /*-----------------------------------servo------------------------------------*/
 void servoOpen(){
 Serial.println("Open Door");
+Serial.println(" ");
       pos = 180;
       myservo1.write(pos);
    }
 void servoClose(){
 Serial.println("Close Door");
+Serial.println(" ");
   pos = -180;
       myservo1.write(pos);
    }
+   
+   //****//
+   
 void servofloor1(){
+      fa=1;
       pos = -180;
       myservo2.write(pos);
+      Serial.println("Floor : 1");
+      Serial.println(" ");
    }
   void servofloor2(){
+      fa=2;
       pos = 93;
       myservo2.write(pos);
+      Serial.println("Floor : 2");
+      Serial.println(" ");
    }
 void servofloor3(){
+      fa=3;
       pos = 180;
       myservo2.write(pos);
+      Serial.println("Floor : 3");
+      Serial.println(" ");
    }
- /*-----------------------------------XXX------------------------------------*/
+ /*-----------------------------------Weight------------------------------------*/
 void weight(){
    if (X<100)
    {
@@ -137,28 +201,7 @@ void weight(){
    delay(500);
  }
 
- void button_door(){
- if (e0 == 0 && e1 == 1 ) //button open
-    {	//int kk=1;
-        Serial.println("OPEN -PRESS");
-	servoOpen();
-	delay(5000);
-	weight();
-    }
- else if (e0 == 1 && e1 == 1) //button open
-    {// int kk=2;
-       Serial.println("OPEN -NOT PRESS");
-       servoClose();
-       weight();
-    }
-   else if (e0 == 1 && e1== 0 ) //button close  
-   {// int kk=3;
-      weight();
-      delay(1000);
-      Serial.println("CLOSE - PRESS");
-    }
-  }
-  /*-----------------------------------7seg------------------------------------*/
+  /*-----------------------------------7seg Display------------------------------------*/
   
  void sevensegment(int num){
   if (num== 1){
@@ -201,10 +244,8 @@ void weight(){
  digitalWrite(PC6,LOW);
  digitalWrite(PC7,LOW);
  } 
-
 }
-  /*-----------------------------------7seg------------------------------------*/
-  void button_7seg(){
+ /*void button_7seg(){
    if (e2==0)
    {   sevensegment(9);
    delay(100);
@@ -222,39 +263,183 @@ void weight(){
       sevensegment(3);
    }
   }
-    /*-----------------------------------Press------------------------------------*/
-void chosefloor(){
-/*while(e2==1 || e3==1 || e4==1 || f0==1 || f1==1 || f2==1 || f3==1){
-   Serial.println("PREEEEEEEEESSSSSSSS");
-}
-*/
-   if(e2==0 && e3 == 1 && e4==1 ){
-   Serial.println("Floor 1");
-   servofloor1();
-   }
-      if(e2==1 && e3 == 0 && e4==1){
-   Serial.println("Floor 2");
-   servofloor2();
-   }
-      if(e2==1 && e3 == 1 && e4==0){
-   Serial.println("Floor 3");
-   servofloor3();
-   }
-   }
-   
-void requestfloor(){
-      if(f0==0){
-   Serial.println("floor 1 req up");
-   }
-      if(f1==0){
-   Serial.println("floor 3 req down ");
-   }
-      if(f2==0){
-   Serial.println("floor 2 req up");
-   }
-      if(f3==0){
-   Serial.println("floor 2 req down");
-   }
+ /*
+  /*-----------------------------------Compared------------------------------------*/
+void compare_door(){
+      if(veil ==1){
+	Serial.println("OPEN -PRESS");
+	servoOpen();
+	delay(5000);
+	weight();
+      }
+      else if(veil ==2){
+       Serial.println("OPEN -NOT PRESS");
+       servoClose();
+       weight();
+      }
+      else if(veil ==3){
+      servoClose();
+      delay(500);
+      weight();
+      delay(1000);
+      Serial.println("CLOSE - PRESS");
+      }
+ }
+ 
+ //**//
+ 
+void  compare_floor(){
+       if (polar == 1 ){
+	 if(fa==2){
+	 floor2to1();
+	 }
+	 if(fa==3){
+	 floor3to1();
+	 /*floor3to2(); 
+	 if(f3==0){
+	    Serial.println("Floor 2 request up");
+	    servoOpen();
+	    delay(1000);
+	    servoClose();
+	     }
+	 floor2to1();*/
+	 }
+	} 
+	 
+	if (polar == 2 ){
+	 if(fa==1){
+	 floor1to2();
+	 }
+	 if(fa==3){
+	 floor3to2();
+	 } 
+	} 
+	if (polar == 3 ){
+	 if(fa==1){
+	    floor1to3();
+	    /*floor1to2();
+	    if(f2==0){
+	    Serial.println("Floor 2 request down");
+	    servoOpen();
+	    delay(1000);
+	    servoClose();
+	     }
+	    floor2to3();*/
+	 }
+	 if(fa==2){
+	    floor2to3();
+	 }
+	} 
 
+      
+}
+void requsetfloor(){
+   if(f0==0){
+      if(fa==1){
+	 servoOpen();
+	 delay(500);
+	 servoClose();
+      }
+       if(fa==2){
+	 floor2to1();
+       }
+       if(fa==3){
+       floor3to1();
+       }
    }
    
+   if(f1==0){
+      if(fa==1){
+	     floor1to3();
+	 }
+	  if(fa==2){
+	     floor2to3();
+	  }
+	  if(fa==3){
+	  servoOpen();
+	  delay(500);
+	  servoClose();
+	  }
+   }
+   
+   if(f2==0 || f3==0){
+      if(fa==1){
+	 floor1to2();
+	 }
+	  if(fa==2){
+	     servoOpen();
+	     delay(500);
+	     servoClose();
+	  }
+	  if(fa==3){
+	    floor3to2();
+	  }
+   }
+}
+
+
+ /*-----------------------------------FLOOR MOVE-----------------------------------*/
+ void floor2to1(){
+   Serial.println("Floor 2 to 1");
+   servofloor1();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+ void floor2to3(){
+   Serial.println("Floor 2 to 3");
+   servofloor3();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+
+ void floor3to2(){
+   Serial.println("Floor 3 to 2");
+   servofloor2();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+ void floor1to2(){
+   Serial.println("Floor 1 to 2");
+   servofloor2();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+ 
+ //**//
+
+ void floor1to3(){
+   Serial.println("Floor 1 to3");
+   servofloor2();
+   delay(1000);
+   if(f2==0){
+      Serial.println("Floor 2 request up");
+      servoOpen();
+      delay(1000);
+      servoClose();
+       }
+   servofloor3();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+ 
+  void floor3to1(){
+   Serial.println("Floor 3 to 1");
+   servofloor2();
+   if(f3==0){
+      Serial.println("Floor 2 request down");
+      servoOpen();
+      delay(1000);
+      servoClose();
+      }
+   delay(1000);
+   servofloor1();
+   servoOpen();
+   delay(500);
+   servoClose();
+ }
+  /*-----------------------------------XXXX----------------------------------*/
