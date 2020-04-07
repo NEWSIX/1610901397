@@ -90,6 +90,9 @@ button_floor();
 requsetfloor();
 compare_floor();
 
+button_door();
+compare_door();
+
 
 }
 
