@@ -185,21 +185,30 @@ void servofloor3(){
    }
  /*-----------------------------------Weight------------------------------------*/
 void weight(){
-   if (X<100)
-   {
+while(X>100){
+      long reading = scale.read();
+      X = reading/10000;
+       servoOpen();
+      Serial.println("Overweight X_X");
+      delay(500);
+      // function alarm signal
+   }
+
+  // if (X<100)
+   //{
       servoClose();
       Serial.println("Not overweight");
       delay(500);
-   }
-   else if (X>100)
+      }
+   //}
+  /* else if (X>100)
    {
       servoOpen();
       Serial.println("Overweight X_X");
       delay(500);
       // function alarm signal
-   }
-   delay(500);
- }
+   }*/
+ 
 
   /*-----------------------------------7seg Display------------------------------------*/
   
@@ -380,6 +389,7 @@ void requsetfloor(){
 
  /*-----------------------------------FLOOR MOVE-----------------------------------*/
  void floor2to1(){
+ weight();
    Serial.println("Floor 2 to 1");
    servofloor1();
    servoOpen();
@@ -387,6 +397,7 @@ void requsetfloor(){
    servoClose();
  }
  void floor2to3(){
+ weight();
    Serial.println("Floor 2 to 3");
    servofloor3();
    servoOpen();
@@ -395,6 +406,7 @@ void requsetfloor(){
  }
 
  void floor3to2(){
+ weight();
    Serial.println("Floor 3 to 2");
    servofloor2();
    servoOpen();
@@ -402,6 +414,7 @@ void requsetfloor(){
    servoClose();
  }
  void floor1to2(){
+ weight();
    Serial.println("Floor 1 to 2");
    servofloor2();
    servoOpen();
@@ -412,6 +425,7 @@ void requsetfloor(){
  //**//
 
  void floor1to3(){
+ weight();
    Serial.println("Floor 1 to3");
    servofloor2();
    delay(1000);
@@ -428,6 +442,7 @@ void requsetfloor(){
  }
  
   void floor3to1(){
+  weight();
    Serial.println("Floor 3 to 1");
    servofloor2();
    if(f3==0){
