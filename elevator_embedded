@@ -63,18 +63,7 @@ pinMode(OUTPUT,PC3);
 
 void loop() 
 {
-e0= digitalRead(PF0 ); //open 
-e1= digitalRead(PF1 ); // close
-e2= digitalRead(PF2 ); //floor1
-e3= digitalRead(PF3 ); //floor 2
-e4= digitalRead(PF4 ); //floor 3
-
-f0= digitalRead(PA0 ); //request up floor 1
-f1= digitalRead(PA1); //request down floor 3
-f2= digitalRead(PA2);//request up floor 2
-f3= digitalRead(PA3); //request down floor 2
-long reading = scale.read();
-X = reading/10000;
+ VALUE();
 
 while (jik != 0){
 servofloor1();
@@ -85,12 +74,24 @@ jik=0;
 button_floor();
 requsetfloor();
 compare_floor();
-
 button_door();
 compare_door();
 
 }
 
+void  VALUE(){
+e0= digitalRead(PF0 ); //open 
+e1= digitalRead(PF1 ); // close
+e2= digitalRead(PF2 ); //floor1
+e3= digitalRead(PF3 ); //floor 2
+e4= digitalRead(PF4 ); //floor 3
+
+f0= digitalRead(PA0 ); //request up floor 1
+f1= digitalRead(PA1); //request down floor 3
+f2= digitalRead(PA2);//request up floor 2
+f3= digitalRead(PA3); //request down floor 2
+
+}
  /*-----------------------------------Press------------------------------------*/
 
  void button_door(){
@@ -174,18 +175,20 @@ void servofloor3(){
    }
  /*-----------------------------------Weight------------------------------------*/
 void weight(){
-while(X>100){
-      long reading = scale.read();
-      X = reading/10000;
-       servoOpen();
-       digitalWrite(PC3,HIGH);
-      delay(500);
-   }
-   {
-      digitalWrite(PC3,LOW);
-      servoClose();
-      delay(500);
+   long reading = scale.read();
+   X = reading/10000;
+   while(X>100){
+	 long reading = scale.read();
+	 X = reading/10000;
+	  servoOpen();
+	  digitalWrite(PC3,HIGH);
+	 delay(500);
       }
+      {
+	 digitalWrite(PC3,LOW);
+	 servoClose();
+	 delay(500);
+	 }
 }
   /*-----------------------------------7seg Display------------------------------------*/
   
@@ -208,33 +211,44 @@ while(X>100){
 }
 
   /*-----------------------------------Compared------------------------------------*/
+   int timer;
+   
 void compare_door(){
-      if(veil ==1){
-	servoOpen();
-	delay(2000);
-	weight();
+      if(veil==1){
+	 servoOpen();
+	 timer=1;
       }
-      else if(veil ==2){
-       servoClose();
-       weight();
+      if(e0 ==1&& e1==0){
+	 servoClose();
       }
-      else if(veil ==3){
-      servoClose();
-      delay(500);
-      weight();
-      delay(1000);
+      if (timer==1){
+	 for(timer;timer<=5000;timer){
+	    VALUE();
+	    if(e1==0){
+	       veil=0;
+	       break;
+	    }
+	    delay(1);
+	    timer=timer+1;
+	 }
+	 servoClose();
       }
  }
+ 
+ //*****************************//
  
  void  compare_floor(){
        if (polar == 1 ){
 	 if(fa==2){
 	 floor2to1();
 	 }
+	 
 	 if(fa==3){
 	 floor3to1();
 	 }
 	} 
+	
+	 //**//
 	 
 	if (polar == 2 ){
 	 if(fa==1){
@@ -253,12 +267,12 @@ void compare_door(){
 	 }
 	} 
 }
+
 void requsetfloor(){
    if(f0==0){
       if(fa==1){
-	 servoOpen();
-	 delay(1000);
-	 servoClose();
+	 veil=1;
+	 compare_door();
       }
        if(fa==2){
 	 floor2to1();
@@ -276,9 +290,8 @@ void requsetfloor(){
 	     floor2to3();
 	  }
 	  if(fa==3){
-	  servoOpen();
-	  delay(1000);
-	  servoClose();
+	     veil=1;
+	    compare_door();
 	  }
    }
    
@@ -287,9 +300,8 @@ void requsetfloor(){
 	 floor1to2();
 	 }
 	  if(fa==2){
-	     servoOpen();
-	     delay(1000);
-	     servoClose();
+	     veil=1;
+	    compare_door();
 	  }
 	  if(fa==3){
 	    floor3to2();
@@ -302,63 +314,55 @@ void requsetfloor(){
  void floor2to1(){
    weight();
    servofloor1();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();
  }
  void floor2to3(){
    weight();
    servofloor3();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();
  }
 
  void floor3to2(){
    weight();
    servofloor2();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();;
  }
  void floor1to2(){
    weight();
    servofloor2();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();
  }
  
  //**//
 
  void floor1to3(){
- weight();
+   weight();
    servofloor2();
    delay(1000);
    if(f2==0){
-      servoOpen();
-      delay(1000);
-      servoClose();
+       veil=1;
+      compare_door();
        }
    servofloor3();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();
  }
  
   void floor3to1(){
   weight();
    servofloor2();
    if(f3==0){
-      servoOpen();
-      delay(1000);
-      servoClose();
+      veil=1;
+      compare_door();
       }
    delay(1000);
    servofloor1();
-   servoOpen();
-   delay(500);
-   servoClose();
+   veil=1;
+   compare_door();
  }
  
   /*-----------------------------------XXXX----------------------------------*/
