@@ -27,17 +27,14 @@ void request()
 {
   if (c == '\n')
   {
-    if (currentLine.length() == 0)
-    {
+    if (currentLine.length() == 0){
      ;
     }
-    else
-      {
+    else{
         currentLine = "";
       }
   }
-  else if (c != '\r') 
-  {
+  else if (c != '\r') {
     currentLine += c;      
   }
 }
@@ -63,9 +60,9 @@ void loop()
         {  
                     
         }
+      }
     }
   }
-}
 }
 
  
