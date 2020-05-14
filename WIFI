@@ -1,14 +1,10 @@
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <WiFiClient.h>
-#include <ESP8266WebServer.h>
+#include <WiFiClientSecure.h>
 
-#ifndef APSSID
-#define APSSID "ESPap"
-#define APPSK  "thereisnospoon"
-#endif
 /* Set these to your desired credentials. */
-const char *ssid = "NEWSIX";
-const char *password = "newsix5510233";
+const char *ssid = "PhaDungSat";
+const char *password = "25072509";
 
 int a,b;
 float t;
