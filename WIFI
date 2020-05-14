@@ -1,68 +1,99 @@
-#include <WiFi.h>     
-const char* ssid     = "PhaDungSat"; 
-const char* password = "25072509";  
-String currentLine;
-char c;
+#include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
 
-int pin[] = {18,19,21};  
+#ifndef APSSID
+#define APSSID "ESPap"
+#define APPSK  "thereisnospoon"
+#endif
+/* Set these to your desired credentials. */
+const char *ssid = "NEWSIX";
+const char *password = "newsix5510233";
+
+int a,b;
+float t;
+char c;
+String currentLine;
 
 WiFiServer server(80);  
-void setup(){
-  for (a = 0; a < pinCount; a++) 
-        {
-         pinMode(pin[a], OUTPUT);
-        }
-  Serial.begin(115200);
-  delay(10); 
-  WiFi.begin(ssid, password); 
-  while (WiFi.status() != WL_CONNECTED){
-  delay(500);
-  Serial.print(".");
-  }    
-  Serial.println(WiFi.localIP());   
-  server.begin();       
-}
+       
+void setup()
+  {
+    Serial.begin(115200);
+    delay(10);
+               
+    Serial.println();
+    Serial.println();
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    
+    WiFi.begin(ssid, password); 
+    
+    while (WiFi.status() != WL_CONNECTED) 
+    {
+      delay(500);
+      Serial.print(".");
+    }
+         
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());   
+   
+    server.begin();       
+  }
 
 void request()
-{
-  if (c == '\n')
   {
-    if (currentLine.length() == 0){
-     ;
-    }
-    else{
-        currentLine = "";
+    if (c == '\n')
+      {
+        if (currentLine.length() == 0)
+          {
+            ;
+          }
+        else
+          {
+            currentLine = "";
+          }
+      }
+    else if (c != '\r') 
+      {
+        currentLine += c;      
       }
   }
-  else if (c != '\r') {
-    currentLine += c;      
-  }
-}
+
+
 void loop()
-{
-  WiFiClient client = server.available();    
-  if (client) 
-  {   
-    Serial.println("Beta Client.");
-    currentLine = "";                    
-    while (client.connected()) 
-    {    
-      if (client.available()) 
-      {                   
-        c = client.read();                 
-        Serial.write(c);  
-        request();
-        if (currentLine.endsWith("GET /LV0")) 
-        {
-         
-        }
-        else if(currentLine.endsWith("GET /LV1")) 
-        {  
-                    
-        }
+  {  
+    WiFiClient client = server.available();    
+    if (client)
+      {   
+        Serial.println("Beta Client.");
+        currentLine = "";   
+                   
+        while (client.connected()) 
+          {    
+            if (client.available()) 
+              {                   
+                c = client.read();                 
+                Serial.write(c);  
+                request();
+        
+                if (currentLine.endsWith("/1")) 
+                  {
+                    Serial.println(" 1 SECOND ");
+                  }
+                else if(currentLine.endsWith("/2")) 
+                  {
+                    Serial.println(" 2 SECOND ");
+                  }
+                else if (currentLine.endsWith("/3")) 
+                  {
+                    Serial.println(" 3 SECOND ");
+                  }
+              }
+          } 
       }
-    }
   }
-}
 
  
