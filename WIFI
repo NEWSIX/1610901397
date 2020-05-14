@@ -1,0 +1,71 @@
+#include <WiFi.h>     
+const char* ssid     = "PhaDungSat"; 
+const char* password = "25072509";  
+String currentLine;
+char c;
+
+int pin[] = {18,19,21};  
+
+WiFiServer server(80);  
+void setup(){
+  for (a = 0; a < pinCount; a++) 
+        {
+         pinMode(pin[a], OUTPUT);
+        }
+  Serial.begin(115200);
+  delay(10); 
+  WiFi.begin(ssid, password); 
+  while (WiFi.status() != WL_CONNECTED){
+  delay(500);
+  Serial.print(".");
+  }    
+  Serial.println(WiFi.localIP());   
+  server.begin();       
+}
+
+void request()
+{
+  if (c == '\n')
+  {
+    if (currentLine.length() == 0)
+    {
+     ;
+    }
+    else
+      {
+        currentLine = "";
+      }
+  }
+  else if (c != '\r') 
+  {
+    currentLine += c;      
+  }
+}
+void loop()
+{
+  WiFiClient client = server.available();    
+  if (client) 
+  {   
+    Serial.println("Beta Client.");
+    currentLine = "";                    
+    while (client.connected()) 
+    {    
+      if (client.available()) 
+      {                   
+        c = client.read();                 
+        Serial.write(c);  
+        request();
+        if (currentLine.endsWith("GET /LV0")) 
+        {
+         
+        }
+        else if(currentLine.endsWith("GET /LV1")) 
+        {  
+                    
+        }
+    }
+  }
+}
+}
+
+ 
